@@ -1,11 +1,10 @@
 # Proyecto Final de Linux 1
 _**Aplicación web con Apache, PHP, HTML, JavaScript, CSS y comandos Linux.**_
 ## Comenzando 🚀
-## Estudiantes:
+## Autores ✒️
 - **Luis Felipe Tejada Padilla** lftejadap@uqvirtual.edu.co
 - **Álvaro Sebastián Tabares Gaviria** astabaresg@uqvirtual.edu.co
 ### Pre-requisitos 📋
-
 _El programa deberá contar con lo siguiente:_
 #### Primera parte
 
