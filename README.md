@@ -1,5 +1,4 @@
 # Proyecto Final de Linux 1
-_**Aplicación web con Apache, PHP, HTML, JavaScript, CSS y comandos Linux.**_
 ## Comenzando 🚀
 ## Autores ✒️
 - **Luis Felipe Tejada Padilla** lftejadap@uqvirtual.edu.co
