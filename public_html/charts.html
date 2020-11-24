@@ -165,24 +165,17 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-pie pt-4">
-                                        <canvas>
-                                            <script type="text/javascript" id="myData">
-                                            console.log("entre");
-                                                var values = $.getJSON("http://phpindex.com/infoRam.php");
-                                                console.log(values)
+                                        <canvas id="myPieChart">
+                                            <script type="text/javascript" id="myDataPie">
                                                 var aux;
-                                                $.get(function(data){
-                                                    console.log("Entre done")
-                                                    console.log(data);
-                                                    
+                                                $.get("http://proyecto/php/RAM.php",function(data){
+                                                    document.getElementById("bottomCardPieChart").innerHTML = data;
                                                     aux = data;
-                                                });
+                                                });                                            
                                             </script>
                                         </canvas>
                                     </div>
-                                    <hr>
-                                    Styling for the donut chart can be found in the
-                                    <code>/js/demo/chart-pie-demo.js</code> file.
+                                    <p id="bottomCardPieChart"></p>
                                 </div>
                             </div>
                         </div>
@@ -251,6 +244,7 @@
 
     <!-- Page level custom scripts -->
     <script src="js/chart-gauge.js"></script>
+    <script src="js/chart-pie.js"></script>
     <script src="js/demo/chart-bar-demo.js"></script>
 
 </body>
