@@ -13,10 +13,11 @@
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="vendor/jquery/jquery.min.js"></script>
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
+    
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -164,49 +165,18 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-pie pt-4">
-                                        <canvas >
-                                            <script type="text/javascript">
-                                                //Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-                                                //Chart.defaults.global.defaultFontColor = '#858796';
-
-                                                // Pie Chart Example
-                                                var aux = $.getJSON('/php/RAM.php');
-
-                                                aux.done(function(data){
+                                        <canvas>
+                                            <script type="text/javascript" id="myData">
+                                            console.log("entre");
+                                                var values = $.getJSON("http://phpindex.com/infoRam.php");
+                                                console.log(values)
+                                                var aux;
+                                                $.get(function(data){
+                                                    console.log("Entre done")
                                                     console.log(data);
+                                                    
+                                                    aux = data;
                                                 });
-                                                //console.log(aux.get(0));
-                                                var ctx = document.getElementById("myPieChart");
-                                                var myPieChart = new Chart(ctx, {
-                                                type: 'doughnut',
-                                                data: {
-                                                    labels: ["Free", "Use"],
-                                                    datasets: [{
-                                                    data: [55, 30],
-                                                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-                                                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
-                                                    hoverBorderColor: "rgba(234, 236, 244, 1)",
-                                                    }],
-                                                },
-                                                options: {
-                                                    maintainAspectRatio: false,
-                                                    tooltips: {
-                                                    backgroundColor: "rgb(255,255,255)",
-                                                    bodyFontColor: "#858796",
-                                                    borderColor: '#dddfeb',
-                                                    borderWidth: 1,
-                                                    xPadding: 15,
-                                                    yPadding: 15,
-                                                    displayColors: false,
-                                                    caretPadding: 10,
-                                                    },
-                                                    legend: {
-                                                    display: false
-                                                    },
-                                                    cutoutPercentage: 80,
-                                                },
-                                                });
-
                                             </script>
                                         </canvas>
                                     </div>
@@ -266,7 +236,6 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->

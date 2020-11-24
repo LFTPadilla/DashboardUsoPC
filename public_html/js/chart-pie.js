@@ -1,15 +1,9 @@
-import '../vendor/jquery/jquery.js'
-import jquery from '../vendor/jquery/jquery';
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
 // Pie Chart Example
-var aux = jquery.
 
-$.ge('./php/RAM.php', function(data){
-  aux = data;
-});
 console.log(aux.get(0));
 var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
