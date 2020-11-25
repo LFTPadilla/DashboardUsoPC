@@ -14,7 +14,7 @@ var free = final[2];
 var myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["Memoria RAM en uso en mb","Memoria RAM libre en mb"],
+    labels: ["Memoria RAM en uso en MB","Memoria RAM libre en MB"],
     datasets: [{
       data: [used, free],
       backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
