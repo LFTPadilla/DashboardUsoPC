@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<?php
 
+
+?>
+<html lang="en">
 <head>
 
     <meta charset="utf-8">
@@ -19,6 +22,7 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    
 
 </head>
 
@@ -99,7 +103,7 @@
                         <div class="card-header py-3">
                             <h3 class="m-0 font-weight-bold text-primary" style="display: inline;">Administración de usuarios</h3>
                             
-                            <button class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#userModal">
+                            <button class="btn btn-success" style="float: right;" onclick="openModal(false,'','','','')" data-toggle="modal" data-target="#userModal">
                                 agregar
                             </button>
                         </div>
@@ -117,13 +121,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+            
+                                        <?php foreach ($resultado as $value){ ?>
                                         <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>202</td>
+                                            <td><?= $value['UID']; ?></td>
+                                            <td><?= $value['login']; ?></td>
+                                            <td><?= $value['username']; ?></td>
+                                            <td><?= $value['hab']; ?></td>
                                             <td style="text-align: center;">
-                                                <button class="btn btn-primary" data-toggle="modal" data-target="#userModal">
+                                                <button class="btn btn-primary" onclick="openModal(true,'1000','felipe','Luis Felipe',1000)" data-toggle="modal" data-target="#userModal">
                                                     Edit
                                                 </button>
                                                 <button class="btn btn-warning">
@@ -131,6 +137,7 @@
                                                 </button>
                                             </td>
                                         </tr>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -173,30 +180,30 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form class="user" action="/php/saveUser.php" method="post">
+                <form class="user" action="php/saveUser.php" method="post">
                     <div class="modal-body">
-                        
+                        <input type="hidden" id="edition" value="false">
                         <div class="form-group row">
                             <div class="col-4 col-md-3 mb-3 mb-sm-0">
-                                <input type="number" class="form-control form-control-user" id="UID"
+                                <input type="number" class="form-control form-control-user" id="UID" name="UID"
                                     placeholder="UID" disabled>
                             </div>
                             <div class="col-8 col-md-5">
-                                <input type="text" class="form-control form-control-user" id="username"
+                                <input type="text" class="form-control form-control-user" id="username" name="username"
                                     placeholder="Login">
                             </div>
                             <div class="col-12 col-md-4">
-                                <input type="text" class="form-control form-control-user" id="password"
+                                <input type="password" class="form-control form-control-user" id="password" name="password"
                                     placeholder="Contraseña">
                             </div>
                         </div> 
                         <div class="form-group row">
                             <div class="col-12 col-md-9 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="name"
+                                <input type="text" class="form-control form-control-user" id="name" name="name"
                                 placeholder="Nombre completo">
                             </div>
                             <div class="col-12 col-md-3">
-                                <input type="number" class="form-control form-control-user" id="hab"
+                                <input type="number" class="form-control form-control-user" id="hab" name="hab"
                                 placeholder="Número habitacion">
                             </div>
                         </div>
@@ -212,6 +219,30 @@
             </div>
         </div>
     </div>
+
+    <script>
+
+        function openModal(edition,UID,username,name,hab){
+            console.log(edition);
+            if(edition){
+                document.getElementById("UID").value = UID;
+                document.getElementById("username").value = username;
+                document.getElementById("name").value = name;
+                document.getElementById("hab").value = hab;
+                document.getElementById("edition").value = true;
+            }else{
+                document.getElementById("UID").value = '';
+                document.getElementById("username").value = '';
+                document.getElementById("password").value = '';
+                document.getElementById("name").value = '';
+                document.getElementById("hab").value = 0;
+                document.getElementById("edition").value = false;
+            }
+            
+        }
+
+    </script>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
