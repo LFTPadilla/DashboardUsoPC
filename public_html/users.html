@@ -97,20 +97,23 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Usuarios</h6>
+                            <h3 class="m-0 font-weight-bold text-primary" style="display: inline;">Administración de usuarios</h3>
+                            
+                            <button class="btn btn-success" style="float: right;" data-toggle="modal" data-target="#userModal">
+                                agregar
+                            </button>
                         </div>
                         <div class="card-body">
                             <!-- Page Heading -->
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                        <tr style="text-align: center;">
+                                            <th>UID</th>
+                                            <th>Login</th>
+                                            <th>Nombres completo</th>
+                                            <th>Habitación</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -118,9 +121,15 @@
                                             <td>Tiger Nixon</td>
                                             <td>System Architect</td>
                                             <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
+                                            <td>202</td>
+                                            <td style="text-align: center;">
+                                                <button class="btn btn-primary" data-toggle="modal" data-target="#userModal">
+                                                    Edit
+                                                </button>
+                                                <button class="btn btn-warning">
+                                                    Delete
+                                                </button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -154,21 +163,52 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="exampleModalLabel">Formulario Usuario</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close" >
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
+                <form class="user" action="/php/saveUser.php" method="post">
+                    <div class="modal-body">
+                        
+                        <div class="form-group row">
+                            <div class="col-4 col-md-3 mb-3 mb-sm-0">
+                                <input type="number" class="form-control form-control-user" id="UID"
+                                    placeholder="UID" disabled>
+                            </div>
+                            <div class="col-8 col-md-5">
+                                <input type="text" class="form-control form-control-user" id="username"
+                                    placeholder="Login">
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <input type="text" class="form-control form-control-user" id="password"
+                                    placeholder="Contraseña">
+                            </div>
+                        </div> 
+                        <div class="form-group row">
+                            <div class="col-12 col-md-9 mb-3 mb-sm-0">
+                                <input type="text" class="form-control form-control-user" id="name"
+                                placeholder="Nombre completo">
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <input type="number" class="form-control form-control-user" id="hab"
+                                placeholder="Número habitacion">
+                            </div>
+                        </div>
+                            
+                        
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary" type="submit" >Guardar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
