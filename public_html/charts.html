@@ -65,7 +65,7 @@
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="tables.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tablas de procesos</span></a>
             </li>
@@ -78,7 +78,7 @@
             </div>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="404.html">
+                <a class="nav-link" href="users.php">
                     <i class="fas fa-user-tie"></i>
                     <span>Gestionar Usuarios</span></a>
             </li>
@@ -129,12 +129,13 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Uso del CPU</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div id="myGaugeChart">
+                                        <script type="text/javascript">
+                                            $.get("http://proyecto/php/CPU.php",function(data){
+                                                document.getElementById("bottomCardGaugeChart").innerHTML = data;
+                                            });                                             
+                                        </script>
                                         <canvas id="myGaugeChart"></canvas>
-                                    </div>
-                                    <hr>
-                                    Styling for the area chart can be found in the
-                                    <code>/js/demo/chart-area-demo.js</code> file.
+                                    <p id="bottomCardGaugeChart"></p>
                                 </div>
                             </div>
 
@@ -166,11 +167,9 @@
                                 <div class="card-body">
                                     <div class="chart-pie pt-4">
                                         <canvas id="myPieChart">
-                                            <script type="text/javascript" id="myDataPie">
-                                                var aux;
+                                            <script type="text/javascript">
                                                 $.get("http://proyecto/php/RAM.php",function(data){
                                                     document.getElementById("bottomCardPieChart").innerHTML = data;
-                                                    aux = data;
                                                 });                                            
                                             </script>
                                         </canvas>
@@ -196,7 +195,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white fixed-bottom">
+            <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; Your Website 2020</span>
@@ -247,12 +246,11 @@
 
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
-
-   <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="js/chart-gauge.js"></script>
-    <script src="js/chart-pie.js"></script>
+    <script src="js/chart-donut.js"></script>
     <script src="js/demo/chart-bar-demo.js"></script>
 
 </body>

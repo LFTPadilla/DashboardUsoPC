@@ -9,16 +9,19 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Blank</title>
+    <title>PROYECTO - Tablas</title>
 
-    <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -27,8 +30,8 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-         <!-- Sidebar -->
-         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -41,7 +44,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Inicio -->
+            <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-house-user"></i>
@@ -75,7 +78,7 @@
             <div class="sidebar-heading">
                 Gestión de usuarios
             </div>
-            <!-- Nav Item - Gestion de usuarios -->
+            <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="users.php">
                     <i class="fas fa-user-tie"></i>
@@ -91,12 +94,67 @@
         </ul>
         <!-- End of Sidebar -->
 
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                        </li>
+                    </ul>
+                </nav>
+                <!-- End of Topbar -->
+
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                        For more information about DataTables, please visit the <a target="_blank"
+                            href="https://datatables.net">official DataTables documentation</a>.</p>
 
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Tabla de procesos que mas uso del CPU hacen</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="tablaCPU" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Porcentaje (%) de uso</th>
+                                            <th>Nombre</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Tabla de procesos que mas uso de memoria RAM hacen</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="tablaRAM" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Porcentaje (%) de uso</th>
+                                            <th>Nombre</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.container-fluid -->
 
@@ -107,7 +165,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; 2020</span>
                     </div>
                 </div>
             </footer>
@@ -154,6 +212,40 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <!-- <script src="js/datatable.js"></script> -->
+
+    <?php
+    exec ( 'ps -eo pcpu,comm | sort -k 1 -r | head -4 | tail -3', $salida_cpu);
+    ?>
+    <script type="text/javascript">
+        var process_data = <?php echo json_encode($salida_cpu); ?>;
+        $(document).ready(function() {
+        var cpu = $('#tablaCPU').DataTable(); 
+        for(let i of process_data){
+            var aux = i.split(" ");
+            cpu.row.add(aux).draw();
+        }
+     });    
+    </script>
+
+    <?php
+    exec ( "ps -eo pmem,comm | sort -k 1 -r | head -4 | tail -3 | sed 's/.//'", $salida_ram);
+    ?>
+    <script type="text/javascript">
+        var process_data_ram = <?php echo json_encode($salida_ram); ?>;
+        $(document).ready(function() {
+        var ram = $('#tablaRAM').DataTable();     
+            for(let i of process_data_ram){
+                var aux = i.split(" ");
+                ram.row.add(aux).draw();
+            }        
+        });    
+    </script>
 </body>
 
 </html>
