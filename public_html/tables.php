@@ -129,24 +129,10 @@
                                 <table class="table table-bordered" id="tablaCPU" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
                                             <th>Porcentaje (%) de uso</th>
+                                            <th>Nombre</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>16</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>17</td>
-                                        </tr>
-                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -161,24 +147,10 @@
                                 <table class="table table-bordered" id="tablaRAM" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
                                             <th>Porcentaje (%) de uso</th>
+                                            <th>Nombre</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>16</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>17</td>
-                                        </tr>
-                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -245,8 +217,35 @@
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/datatable.js"></script>
+    <!-- <script src="js/datatable.js"></script> -->
 
+    <?php
+    exec ( 'ps -eo pcpu,comm | sort -k 1 -r | head -4 | tail -3', $salida_cpu);
+    ?>
+    <script type="text/javascript">
+        var process_data = <?php echo json_encode($salida_cpu); ?>;
+        $(document).ready(function() {
+        var cpu = $('#tablaCPU').DataTable(); 
+        for(let i of process_data){
+            var aux = i.split(" ");
+            cpu.row.add(aux).draw();
+        }
+     });    
+    </script>
+
+    <?php
+    exec ( "ps -eo pmem,comm | sort -k 1 -r | head -4 | tail -3 | sed 's/.//'", $salida_ram);
+    ?>
+    <script type="text/javascript">
+        var process_data_ram = <?php echo json_encode($salida_ram); ?>;
+        $(document).ready(function() {
+        var ram = $('#tablaRAM').DataTable();     
+            for(let i of process_data_ram){
+                var aux = i.split(" ");
+                ram.row.add(aux).draw();
+            }        
+        });    
+    </script>
 </body>
 
 </html>
