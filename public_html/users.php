@@ -1,8 +1,27 @@
-<!DOCTYPE html>
 <?php
 
+class User 
+{
+    public $UID;
+    public $login;
+    public $username;
+    public $hab;
+
+    public function __construct($UID, $login, $username, $hab)
+    {
+        $this->UID = $UID;
+        $this->login = $login;
+        $this->username = $username;
+        $this->hab = $hab;
+    }
+}
+
+
+$usuario = new User(1000,'felipe',"Luis Felipe Tejada", 202);
+$resultado =  array($usuario);
 
 ?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 
@@ -12,7 +31,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Blank</title>
+    <title>Gestión de Usuarios</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -102,10 +121,15 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h3 class="m-0 font-weight-bold text-primary" style="display: inline;">Administración de usuarios</h3>
-                            
-                            <button class="btn btn-success" style="float: right;" onclick="openModal(false,'','','','')" data-toggle="modal" data-target="#userModal">
+                            <div style="float: right; display:inline">
+                            <button class="btn btn-success"  onclick="openModal(false,'','','','')" data-toggle="modal" data-target="#userModal">
                                 agregar
                             </button>
+                            <button class="btn btn-info" >
+                                Cargar CSV
+                            </button>
+                            </div>
+                            
                         </div>
                         <div class="card-body">
                             <!-- Page Heading -->
@@ -124,15 +148,15 @@
             
                                         <?php foreach ($resultado as $value){ ?>
                                         <tr>
-                                            <td><?= $value['UID']; ?></td>
-                                            <td><?= $value['login']; ?></td>
-                                            <td><?= $value['username']; ?></td>
-                                            <td><?= $value['hab']; ?></td>
+                                            <td><?= $value->UID; ?></td>
+                                            <td><?= $value->login; ?></td>
+                                            <td><?= $value->username; ?></td>
+                                            <td><?= $value->hab; ?></td>
                                             <td style="text-align: center;">
-                                                <button class="btn btn-primary" onclick="openModal(true,'1000','felipe','Luis Felipe',1000)" data-toggle="modal" data-target="#userModal">
+                                                <button class="btn btn-primary" onclick="openModal(true,'<?= $value->UID; ?>','<?= $value->login; ?>','<?= $value->username; ?>','<?= $value->hab; ?>')" data-toggle="modal" data-target="#userModal">
                                                     Edit
                                                 </button>
-                                                <button class="btn btn-warning">
+                                                <button class="btn btn-warning" onclick="openModal(null,'<?= $value->UID; ?>','<?= $value->login; ?>','<?= $value->username; ?>','<?= $value->hab; ?>')">
                                                     Delete
                                                 </button>
                                             </td>
@@ -152,7 +176,8 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <h4 style="color:orange;"><?php if(isset($_GET['msg'])){ echo($_GET["msg"]); } ?></h4>
+                        <span>Copyright &copy; Felipe Tejada - Sebastian Tabares 2020</span>
                     </div>
                 </div>
             </footer>
@@ -182,7 +207,7 @@
                 </div>
                 <form class="user" action="php/saveUser.php" method="post">
                     <div class="modal-body">
-                        <input type="hidden" id="edition" value="false">
+                        <input type="hidden" id="edition" name="edition" value="false">
                         <div class="form-group row">
                             <div class="col-4 col-md-3 mb-3 mb-sm-0">
                                 <input type="number" class="form-control form-control-user" id="UID" name="UID"
@@ -222,23 +247,27 @@
 
     <script>
 
+        
         function openModal(edition,UID,username,name,hab){
-            console.log(edition);
+            console.log(edition,UID,username,name,hab);
             if(edition){
                 document.getElementById("UID").value = UID;
                 document.getElementById("username").value = username;
                 document.getElementById("name").value = name;
                 document.getElementById("hab").value = hab;
                 document.getElementById("edition").value = true;
-            }else{
+            }else if(edition==false){
                 document.getElementById("UID").value = '';
                 document.getElementById("username").value = '';
                 document.getElementById("password").value = '';
                 document.getElementById("name").value = '';
                 document.getElementById("hab").value = 0;
                 document.getElementById("edition").value = false;
-            }
-            
+            }else{
+                var dir = "php/saveUser.php?username="+username;
+                console.log(dir)
+                location.href=dir;
+            }        
         }
 
     </script>
