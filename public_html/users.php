@@ -68,7 +68,7 @@
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="tables.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tablas de procesos</span></a>
             </li>
@@ -81,7 +81,7 @@
             </div>
             <!-- Nav Item - Gestion de usuarios -->
             <li class="nav-item">
-                <a class="nav-link" href="404.html">
+                <a class="nav-link" href="users.php">
                     <i class="fas fa-user-tie"></i>
                     <span>Gestionar Usuarios</span></a>
             </li>
