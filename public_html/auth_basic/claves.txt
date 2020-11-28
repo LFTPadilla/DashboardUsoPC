@@ -1,0 +1,3 @@
+luis:$apr1$LzreeNiI$GFz4YGfv2Alxihefkdz4o1
+daniel:$apr1$C.vJ18h0$vwv3php6oaUc6XxyLNn2t/
+sebastian:$apr1$jG3k3fG8$AItCDFHSzojHR8LFz7C/4/

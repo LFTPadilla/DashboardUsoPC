@@ -16,9 +16,37 @@ class User
     }
 }
 
+$usuariosListado =  [];
 
-$usuario = new User(1000,'felipe',"Luis Felipe Tejada", 202);
-$resultado =  array($usuario);
+$lastUser = shell_exec('tail -1 /etc/passwd');
+list($lastU, $contraseña, $uid, $gid, $extra) =  explode(":", $lastUser,5);
+$i = 1;
+
+do{
+    $user = shell_exec('sed -n \''.$i.'p\' /etc/passwd');
+    list($usuario, $contraseña, $uid, $gid, $extra) =  explode(":", $user,5);
+
+    if(intval($uid) >= 1000){
+        list($coment,,) = explode(":",$extra,3);
+        list($name,$hab,$telWork,) = explode(",",$coment,4);
+        
+        $u = new User($uid,$usuario,$name, intval($hab));
+        array_push($usuariosListado,$u);
+        
+    }
+    $i = $i+1;
+    if($lastU == $usuario){
+        break;
+    }
+}while ( true );
+//echo($result);
+
+//$users = explode(" ", $result);
+
+//echo($users);
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -34,13 +62,13 @@ $resultado =  array($usuario);
     <title>Gestión de Usuarios</title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
     
 
 </head>
@@ -113,6 +141,7 @@ $resultado =  array($usuario);
             </div>
         </ul>
         <!-- End of Sidebar -->
+        
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -120,18 +149,29 @@ $resultado =  array($usuario);
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h3 class="m-0 font-weight-bold text-primary" style="display: inline;">Administración de usuarios</h3>
-                            <div style="float: right; display:inline">
-                            <button class="btn btn-success"  onclick="openModal(false,'','','','')" data-toggle="modal" data-target="#userModal">
-                                agregar
-                            </button>
-                            <button class="btn btn-info" >
-                                Cargar CSV
-                            </button>
+                            
+                            <div class="row">
+                                <div class="col-5">
+                                    <h3 class="m-0 font-weight-bold text-primary" style="display: inline;">Administración de usuarios</h3>
+                                </div>
+                                <div class="col-6">
+                                    <form action="saveUser.php" method="post" enctype="multipart/form-data" id="import_form">
+                                        <input type="file" accept=".csv" name="file" />
+                                        <input type="submit" class="btn btn-info" name="import_data" value="Cargar CSV">
+                                    </form>
+                                </div>
+                                <div class="col-1">
+                                    <button class="btn btn-success"  onclick="openModal(false,'','','','')" data-toggle="modal" data-target="#userModal">
+                                        agregar
+                                    </button>
+                                </div>
+                            
+                            
                             </div>
                             
                         </div>
                         <div class="card-body">
+                            <h4 style="color:orange;"><?php if(isset($_GET['msg'])){ echo($_GET["msg"]); } ?></h4>
                             <!-- Page Heading -->
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -146,7 +186,7 @@ $resultado =  array($usuario);
                                     </thead>
                                     <tbody>
             
-                                        <?php foreach ($resultado as $value){ ?>
+                                        <?php foreach ($usuariosListado as $value){ ?>
                                         <tr>
                                             <td><?= $value->UID; ?></td>
                                             <td><?= $value->login; ?></td>
@@ -156,7 +196,7 @@ $resultado =  array($usuario);
                                                 <button class="btn btn-primary" onclick="openModal(true,'<?= $value->UID; ?>','<?= $value->login; ?>','<?= $value->username; ?>','<?= $value->hab; ?>')" data-toggle="modal" data-target="#userModal">
                                                     Edit
                                                 </button>
-                                                <button class="btn btn-warning" onclick="openModal(null,'<?= $value->UID; ?>','<?= $value->login; ?>','<?= $value->username; ?>','<?= $value->hab; ?>')">
+                                                <button class="btn btn-danger" onclick="openModal(null,'<?= $value->UID; ?>','<?= $value->login; ?>','<?= $value->username; ?>','<?= $value->hab; ?>')">
                                                     Delete
                                                 </button>
                                             </td>
@@ -176,7 +216,7 @@ $resultado =  array($usuario);
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <h4 style="color:orange;"><?php if(isset($_GET['msg'])){ echo($_GET["msg"]); } ?></h4>
+                        
                         <span>Copyright &copy; Felipe Tejada - Sebastian Tabares 2020</span>
                     </div>
                 </div>
@@ -205,7 +245,7 @@ $resultado =  array($usuario);
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form class="user" action="php/saveUser.php" method="post">
+                <form class="user" action="saveUser.php" method="post">
                     <div class="modal-body">
                         <input type="hidden" id="edition" name="edition" value="false">
                         <div class="form-group row">
@@ -253,18 +293,20 @@ $resultado =  array($usuario);
             if(edition){
                 document.getElementById("UID").value = UID;
                 document.getElementById("username").value = username;
+                document.getElementById("username").readOnly = true;
                 document.getElementById("name").value = name;
                 document.getElementById("hab").value = hab;
                 document.getElementById("edition").value = true;
             }else if(edition==false){
                 document.getElementById("UID").value = '';
                 document.getElementById("username").value = '';
+                document.getElementById("username").readOnly = false;
                 document.getElementById("password").value = '';
                 document.getElementById("name").value = '';
                 document.getElementById("hab").value = 0;
                 document.getElementById("edition").value = false;
             }else{
-                var dir = "php/saveUser.php?username="+username;
+                var dir = "saveUser.php?username="+username;
                 console.log(dir)
                 location.href=dir;
             }        
@@ -274,14 +316,14 @@ $resultado =  array($usuario);
 
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="../js/sb-admin-2.min.js"></script>
 
 </body>
 
