@@ -130,12 +130,49 @@
                                 </div>
                                 <div class="card-body">
                                         <script type="text/javascript">
-                                            $.get("http://proyecto/php/CPU.php",function(data){
-                                                document.getElementById("bottomCardGaugeChart").innerHTML = data;
+                                            $.get("http://proyecto/php/CPU.php",function(value){
+                                                console.log("sirvio");
+                                                console.log("Hola desde gauge");
+                                                var n = parseFloat(value);
+                                                google.charts.load('current', {'packages':['gauge']});
+                                                google.charts.setOnLoadCallback(drawChart);
+
+                                                function drawChart() {
+
+                                                var data = google.visualization.arrayToDataTable([
+                                                    ['Uso del CPU', 'Valor'],
+                                                    ['5min', n],
+                                                    ['10min', n],
+                                                    ['15min', n]
+                                                ]);
+
+                                                var options = {
+                                                    width: 400, height: 120,
+                                                    redFrom: 90, redTo: 100,
+                                                    yellowFrom:75, yellowTo: 90,
+                                                    minorTicks: 5
+                                                };
+
+                                                var chart = new google.visualization.Gauge(document.getElementById("myGaugeChart"));
+
+                                                chart.draw(data, options);
+
+                                                setInterval(function() {
+                                                    data.setValue(0, 1, n);
+                                                    chart.draw(data, options);
+                                                }, 300000);
+                                                setInterval(function() {
+                                                    data.setValue(1, 1, n);
+                                                    chart.draw(data, options);
+                                                }, 600000);
+                                                setInterval(function() {
+                                                    data.setValue(2, 1, n);
+                                                    chart.draw(data, options);
+                                                }, 900000);
+                                                }
                                             });                                             
                                         </script>
-                                        <canvas id="myGaugeChart"></canvas>
-                                    <p id="bottomCardGaugeChart"></p>
+                                    <div id="myGaugeChart" style="width: 400px; height: 120px;"></div>
                                 </div>
                             </div>
 
@@ -249,8 +286,8 @@
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/chart-gauge.js"></script>
     <script src="js/chart-donut.js"></script>
+   <!-- <script src="js/chart-gauge.js"></script>-->
     <script src="js/demo/chart-bar-demo.js"></script>
 
 </body>
