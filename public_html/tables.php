@@ -218,33 +218,63 @@
 
     <!-- Page level custom scripts -->
     <!-- <script src="js/datatable.js"></script> -->
-
-    <?php
-    exec ( 'ps -eo pcpu,comm | sort -k 1 -r | head -4 | tail -3', $salida_cpu);
-    ?>
     <script type="text/javascript">
-        var process_data = <?php echo json_encode($salida_cpu); ?>;
         $(document).ready(function() {
-        var cpu = $('#tablaCPU').DataTable(); 
-        for(let i of process_data){
-            var aux = i.split(" ");
-            cpu.row.add(aux).draw();
-        }
+            var data;
+            load_table();
+            setInterval(function() {
+                clear_table();
+                load_table();
+            }, 30000);
      });    
+     function clear_table(){
+        $('#tablaCPU').DataTable().clear();
+     }
+     function load_table(){     
+         var values;
+         $.get("http://proyecto/php/CPU_process.php", function(data){
+                values = data.split(";")[0];
+                var json_t = JSON.parse(values);
+                console.log(json_t);
+                var cpu = $('#tablaCPU').DataTable({
+                    "order": [[ 0, "desc" ]],
+                    retrieve: true
+                }); 
+                for(let i of json_t){
+                var aux = i.split(" ");
+                cpu.row.add(aux).draw();
+            } 
+            });        
+        }
     </script>
 
-    <?php
-    exec ( "ps -eo pmem,comm | sort -k 1 -r | head -4 | tail -3 | sed 's/.//'", $salida_ram);
-    ?>
     <script type="text/javascript">
-        var process_data_ram = <?php echo json_encode($salida_ram); ?>;
         $(document).ready(function() {
-        var ram = $('#tablaRAM').DataTable();     
-            for(let i of process_data_ram){
+            load_table_ram();
+            setInterval(function() {
+                clear_table_ram();
+                load_table_ram();
+            }, 30000);
+     });    
+     function clear_table_ram(){
+        $('#tablaRAM').DataTable().clear();
+     }
+     function load_table_ram(){     
+         var values_ram;
+         $.get("http://proyecto/php/RAM_process.php", function(data){
+                values_ram = data.split(";")[0];
+                var json_ram = JSON.parse(values_ram);
+                console.log(json_ram);
+                var ram = $('#tablaRAM').DataTable({
+                    "order": [[ 0, "desc" ]],
+                    retrieve: true
+                }); 
+                for(let i of json_ram){
                 var aux = i.split(" ");
                 ram.row.add(aux).draw();
-            }        
-        });    
+            } 
+            });        
+        }
     </script>
 </body>
 
