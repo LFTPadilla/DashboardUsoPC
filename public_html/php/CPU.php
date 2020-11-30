@@ -1,4 +1,8 @@
 <?php
-$total_cpu = exec("top -bn1 | grep \"Cpu(s)\" | awk '{print 100-$8}'");
-echo $total_cpu;
+$loads = sys_getloadavg();
+$core_n = exec("nproc --all");
+for($i = 0; $i<count($loads); ++$i){
+	$loads[$i] = round($loads[$i] / $core_n * 100,2);
+}
+echo json_encode($loads);
 ?>

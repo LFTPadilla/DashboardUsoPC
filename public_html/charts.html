@@ -120,59 +120,39 @@
 
                     <!-- Content Row -->
                     <div class="row">
-
+                        <!-- Donut Chart -->
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Uso de la memoria RAM</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4">
+                                        <canvas id="myPieChart"></canvas>
+                                    </div>
+                                    <div class="mt-4 text-center small">
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-primary"></i> Memoria RAM en uso
+                                        </span>
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-success"></i> Memoria RAM disponible
+                                        </span>
+                                    </div>
+                                    <p id="bottomCardPieChart"></p>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-xl-8 col-lg-7">
-
+                        <script src="https://www.gstatic.com/charts/loader.js"></script>
                             <!-- Area Chart -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Uso del CPU</h6>
                                 </div>
                                 <div class="card-body">
-                                        <script type="text/javascript">
-                                            $.get("http://proyecto/php/CPU.php",function(value){
-                                                console.log("sirvio");
-                                                console.log("Hola desde gauge");
-                                                var n = parseFloat(value);
-                                                google.charts.load('current', {'packages':['gauge']});
-                                                google.charts.setOnLoadCallback(drawChart);
-
-                                                function drawChart() {
-
-                                                var data = google.visualization.arrayToDataTable([
-                                                    ['Uso del CPU', 'Valor'],
-                                                    ['5min', n],
-                                                    ['10min', n],
-                                                    ['15min', n]
-                                                ]);
-
-                                                var options = {
-                                                    width: 400, height: 120,
-                                                    redFrom: 90, redTo: 100,
-                                                    yellowFrom:75, yellowTo: 90,
-                                                    minorTicks: 5
-                                                };
-
-                                                var chart = new google.visualization.Gauge(document.getElementById("myGaugeChart"));
-
-                                                chart.draw(data, options);
-
-                                                setInterval(function() {
-                                                    data.setValue(0, 1, n);
-                                                    chart.draw(data, options);
-                                                }, 300000);
-                                                setInterval(function() {
-                                                    data.setValue(1, 1, n);
-                                                    chart.draw(data, options);
-                                                }, 600000);
-                                                setInterval(function() {
-                                                    data.setValue(2, 1, n);
-                                                    chart.draw(data, options);
-                                                }, 900000);
-                                                }
-                                            });                                             
-                                        </script>
-                                    <div id="myGaugeChart" style="width: 400px; height: 120px;"></div>
+                                    <div id="myGaugeChart" style="width: 300px; height: 250px;"></div>
                                 </div>
                             </div>
 
@@ -193,36 +173,7 @@
 
                         </div>
 
-                        <!-- Donut Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Uso de la memoria RAM</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4">
-                                        <canvas id="myPieChart">
-                                            <script type="text/javascript">
-                                                $.get("http://proyecto/php/RAM.php",function(data){
-                                                    document.getElementById("bottomCardPieChart").innerHTML = data;
-                                                });                                            
-                                            </script>
-                                        </canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Memoria RAM en uso
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Memoria RAM disponible
-                                        </span>
-                                    </div>
-                                    <p id="bottomCardPieChart" hidden="true"></p>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
 
                 </div>
@@ -283,11 +234,94 @@
 
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-
     <!-- Page level custom scripts -->
-    <script src="js/chart-donut.js"></script>
     <script src="js/demo/chart-bar-demo.js"></script>
+    <script type="text/javascript">
+    // Set new default font family and font color to mimic Bootstrap's default styling
+    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
+    load_pie_chart();
+        setInterval(function() {
+            load_pie_chart();
+    }, 30000);
+
+    function load_pie_chart(){
+        $.get("php/RAM.php",function(data){
+            // Pie Chart Example
+            var values = data.split(" ");
+            var ctx = document.getElementById("myPieChart");
+
+            var used = values[1];
+            var free = values[2];
+            var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Memoria RAM en uso en MB","Memoria RAM libre en MB"],
+                datasets: [{
+                data: [used, free],
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+                },
+                legend: {
+                display: false
+                },
+                cutoutPercentage: 80,
+            },
+            });
+        }); 
+    }   
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            load_gauge_chart();
+                setInterval(function() {
+                    load_gauge_chart();
+                }, 30000);
+        });    
+        function load_gauge_chart(){
+            $.get("php/CPU.php",function(value){
+                console.log("sirvio");
+                var values = JSON.parse(value);
+                google.charts.load('current', {'packages':['gauge']});
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Uso del CPU', 'Valor'],
+                    ['1min', values[0]],
+                    ['5min', values[1]],
+                    ['15min', values[2]]
+                ]);
+
+                var options = {
+                    width: 600, height: 300,
+                    redFrom: 90, redTo: 100,
+                    yellowFrom:75, yellowTo: 90,
+                    minorTicks: 5
+                };
+
+                var chart = new google.visualization.Gauge(document.getElementById("myGaugeChart"));
+
+                chart.draw(data, options);
+                }
+            });  
+        }
+    </script>
 
 </body>
 

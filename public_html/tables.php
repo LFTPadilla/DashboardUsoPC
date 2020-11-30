@@ -232,7 +232,7 @@
      }
      function load_table(){     
          var values;
-         $.get("http://proyecto/php/CPU_process.php", function(data){
+         $.get("php/CPU_process.php", function(data){
                 values = data.split(";")[0];
                 var json_t = JSON.parse(values);
                 console.log(json_t);
