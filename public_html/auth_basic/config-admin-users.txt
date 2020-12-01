@@ -1,0 +1,30 @@
+PARA CONFIGURAR SUPERUSUARIO EN PHP
+Comando
+sudo visudo
+
+En la ultima linea se escribe
+www-data        ALL=NOPASSWD: /var/www/html/pulic_html/auth_basic/crearusuario.sh
+
+
+
+
+
+PARA CONFIGURAR CARPETA DE AUTENTICACIÓN
+En el archivo 000-default.conf de /etc/apache2/sites-enabled se añade la siguientes lineas:
+
+<Directory /var/www/html/proyecto/auth_basic>
+		Order deny,allow
+		AuthUserFile "/etc/apache2/claves.txt"
+		AuthName "Debe loguear un usuario para entrar al administrador de usuarios"
+		AuthType Basic
+		Require valid-user
+</Directory>
+
+Se debe crear un archivo de claves con 
+htpasswd -c claves.txt /etc/apache2/claves.txt felipe
+Acto seguido ingresa la clave para el usuario felipe
+
+Se verifica sintaxis con apache2ctl -t  y se reinicia el servidor apache con service apache2 reload
+
+
+
